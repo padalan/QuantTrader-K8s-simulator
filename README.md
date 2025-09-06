@@ -119,11 +119,11 @@ This project is licensed under the MIT License - see the `LICENSE` file.
 - Terraform consolidated to root with modules for backend, billing, and VPC
 - Single active environment: `environments/dev` (staging/prod pruned as placeholders)
 - New parameterized Terraform runner: `./scripts/terraform-env.sh <env> <action>`
-- VPC validation test: `make test-epic-1.45`
+- VPC validation test: `make test-epic-1.5`
 
 ### Useful commands
 
 - `make env-dev-init` / `make env-dev-plan` / `make env-dev-apply`
 - `./scripts/terraform-env.sh dev apply` (parameterized)
-- `make test-all` and `make test-epic-1.45`
+- `make test-all` and `make test-epic-1.5`
 

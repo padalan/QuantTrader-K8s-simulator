@@ -126,5 +126,5 @@ env-dev-destroy: ## Destroy Terraform in environments/dev
 test-epic-1.3: ## Run Epic 1.3 test suite
 	./scripts/test-epic-1.3.sh
 
-test-epic-1.45: ## Validate VPC & Networking configuration
-	./scripts/test-epic-1.45.sh
+test-epic-1.5: ## Validate VPC & Networking configuration
+	./scripts/test-epic-1.5.sh

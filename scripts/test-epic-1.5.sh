@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# test-epic-1.45.sh | Validate VPC & Networking configuration
-# QuantTrader-K8s-Simulator Phase 1 - Epic 1.45
+# test-epic-1.5.sh | Validate VPC & Networking configuration
+# QuantTrader-K8s-Simulator Phase 1 - Epic 1.5
 
 set -euo pipefail
 
@@ -15,7 +15,7 @@ log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
-log_info "Starting Epic 1.45 Validation"
+log_info "Starting Epic 1.5 Validation"
 echo "=================================="
 
 cd terraform/environments/dev
@@ -78,4 +78,4 @@ SG_NODES=$(terraform output -raw eks_nodes_security_group_id)
 
 log_info "Validation Complete!"
 echo "=================================="
-log_success "Epic 1.45 validation completed successfully!"
+log_success "Epic 1.5 validation completed successfully!"

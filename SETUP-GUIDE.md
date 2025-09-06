@@ -59,7 +59,7 @@ make env-dev-apply
 
 6) Validate VPC & Networking
 ```bash
-make test-epic-1.45
+make test-epic-1.5
 ```
 
 ## Troubleshooting
