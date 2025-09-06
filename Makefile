@@ -109,19 +109,22 @@ test-all: ## Run all available tests
 
 
 env-dev-init: ## Initialize Terraform in environments/dev
-	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform init
+	AWS_PROFILE=$(AWS_PROFILE) ./scripts/terraform-env.sh dev init
 
 env-dev-validate: ## Validate Terraform in environments/dev
-	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform validate
+	AWS_PROFILE=$(AWS_PROFILE) ./scripts/terraform-env.sh dev validate
 
 env-dev-plan: ## Plan Terraform in environments/dev
-	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform plan -var-file="terraform.tfvars"
+	AWS_PROFILE=$(AWS_PROFILE) ./scripts/terraform-env.sh dev plan
 
 env-dev-apply: ## Apply Terraform in environments/dev
-	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform apply -auto-approve -var-file="terraform.tfvars"
+	AWS_PROFILE=$(AWS_PROFILE) ./scripts/terraform-env.sh dev apply
 
 env-dev-destroy: ## Destroy Terraform in environments/dev
-	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform destroy -auto-approve -var-file="terraform.tfvars"
+	AWS_PROFILE=$(AWS_PROFILE) ./scripts/terraform-env.sh dev destroy
 
 test-epic-1.3: ## Run Epic 1.3 test suite
 	./scripts/test-epic-1.3.sh
+
+test-epic-1.45: ## Validate VPC & Networking configuration
+	./scripts/test-epic-1.45.sh
