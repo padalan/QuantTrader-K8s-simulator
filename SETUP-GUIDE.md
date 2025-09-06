@@ -69,7 +69,8 @@ make test-epic-1.5
 - `./scripts/terraform-env.sh dev init`
 - See `AWS-PERMISSIONS.md`
 
-## Next Steps
+- Use `make hobby-start` to practice Kubernetes locally with Kind
+- When comfortable, plan Phase 2 (introduce cloud Kubernetes, GitOps, observability)
 
 - Use `make hobby-start` to practice Kubernetes locally with Kind
 - When comfortable, plan Phase 2 (introduce cloud Kubernetes, GitOps, observability)

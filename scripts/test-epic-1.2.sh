@@ -103,6 +103,7 @@ done
 
 # 4. Verify Terraform Configuration
 log_info "4. Verifying Terraform configuration..."
+terraform init -reconfigure >/dev/null 2>log_info "4. Verifying Terraform configuration..."1 || true
 cd terraform
 if terraform validate >/dev/null 2>&1; then
     log_success "Terraform configuration is valid"
