@@ -25,5 +25,29 @@ variable "availability_zones" {
 variable "enable_nat_gateway" {
   description = "Enable NAT Gateway for private subnets"
   type        = bool
-  default     = true
+  default     = false
+}
+
+variable "nat_per_az" {
+  description = "Create one NAT Gateway per public subnet/AZ (costly)"
+  type        = bool
+  default     = false
+}
+
+variable "public_subnet_cidrs" {
+  description = "List of CIDR blocks for public subnets (optional)"
+  type        = list(string)
+  default     = []
+}
+
+variable "private_subnet_cidrs" {
+  description = "List of CIDR blocks for private subnets (optional)"
+  type        = list(string)
+  default     = []
+}
+
+variable "tags" {
+  description = "Additional tags to apply to all resources"
+  type        = map(string)
+  default     = {}
 }
