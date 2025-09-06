@@ -82,14 +82,12 @@ clean: clean-repo ## Clean everything (cache + ephemeral docs + temp files)
 
 
 terraform-init-all: ## Initialize all environments
+	cd terraform && terraform init || true
 	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform init || true
-	cd terraform/environments/staging && terraform init || true
-	cd terraform/environments/prod && terraform init || true
 
 terraform-plan-all: ## Plan all environments
+	cd terraform && terraform plan || true
 	cd terraform/environments/dev && terraform plan || true
-	cd terraform/environments/staging && terraform plan || true
-	cd terraform/environments/prod && terraform plan || true
 
 terraform-lint: ## Run terraform linting
 	cd terraform && tflint --recursive || true
@@ -100,28 +98,56 @@ terraform-docs: ## Generate Terraform docs
 
 test-epic-1.2: ## Test Epic 1.2 implementation
 	./scripts/test-epic-1.2.sh
+	./scripts/test-epic-1.5.sh
 
 test-all: ## Run all available tests
 	@echo "Running comprehensive test suite..."
 	./scripts/check-prerequisites-simple.sh
 	./scripts/test-epic-1.2.sh
+	./scripts/test-epic-1.5.sh
 	@echo "All tests completed!"
 
 
 env-dev-init: ## Initialize Terraform in environments/dev
-	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform init
+	AWS_PROFILE=$(AWS_PROFILE) ./scripts/terraform-env.sh dev init
 
 env-dev-validate: ## Validate Terraform in environments/dev
-	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform validate
+	AWS_PROFILE=$(AWS_PROFILE) ./scripts/terraform-env.sh dev validate
 
 env-dev-plan: ## Plan Terraform in environments/dev
-	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform plan -var-file="terraform.tfvars"
+	AWS_PROFILE=$(AWS_PROFILE) ./scripts/terraform-env.sh dev plan
 
 env-dev-apply: ## Apply Terraform in environments/dev
-	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform apply -auto-approve -var-file="terraform.tfvars"
+	AWS_PROFILE=$(AWS_PROFILE) ./scripts/terraform-env.sh dev apply
 
 env-dev-destroy: ## Destroy Terraform in environments/dev
-	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform destroy -auto-approve -var-file="terraform.tfvars"
+	AWS_PROFILE=$(AWS_PROFILE) ./scripts/terraform-env.sh dev destroy
 
 test-epic-1.3: ## Run Epic 1.3 test suite
 	./scripts/test-epic-1.3.sh
+
+test-epic-1.5: ## Validate VPC & Networking configuration
+	./scripts/test-epic-1.5.sh
+
+# Hobby mode targets for local development
+hobby-start: ## Start hobby-mode infrastructure (local Kind + minimal AWS)
+	@echo "🏠 Starting hobby infrastructure (local + minimal AWS)"
+	@echo "Checking Docker daemon..."
+	@until docker info >/dev/null 2>&1; do \
+		echo "Waiting for Docker daemon to start..."; \
+		sleep 2; \
+	done
+	@echo "Creating Kind cluster..."
+	kind create cluster --config local/kind-config.yaml || echo "Kind cluster may already exist"
+	@echo "Starting minimal AWS resources..."
+	cd terraform && terraform init -reconfigure && terraform apply -var="deployment_mode=local" -auto-approve || echo "AWS resources may already exist"
+
+hobby-stop: ## Stop and save costs
+	@echo "💰 Stopping infrastructure to save costs"
+	kind delete cluster || echo "Kind cluster not found"
+	cd terraform && terraform init -reconfigure && terraform destroy -auto-approve || echo "No AWS resources to destroy"
+
+phase-upgrade-check: ## Check if ready for next phase
+	@echo "🎯 Phase upgrade readiness:"
+	@./scripts/phase-check.sh
+

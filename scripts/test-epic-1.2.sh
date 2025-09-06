@@ -85,7 +85,7 @@ fi
 
 # 3. Verify Environment Structure
 log_info "3. Verifying environment structure..."
-for env in dev staging prod; do
+for env in dev; do
     if [ -d "terraform/environments/$env" ]; then
         log_success "Environment $env directory exists"
     else
@@ -103,6 +103,7 @@ done
 
 # 4. Verify Terraform Configuration
 log_info "4. Verifying Terraform configuration..."
+terraform init -reconfigure >/dev/null 2>log_info "4. Verifying Terraform configuration..."1 || true
 cd terraform
 if terraform validate >/dev/null 2>&1; then
     log_success "Terraform configuration is valid"
@@ -210,7 +211,7 @@ echo "=================================="
 echo ""
 echo "Summary:"
 echo "- Module Structure: Billing module with main.tf, variables.tf, outputs.tf"
-echo "- Environment Configs: dev, staging, prod tfvars files"
+echo "- Environment Configs: dev tfvars file"
 echo "- Terraform Validation: Configuration valid and formatted"
 echo "- Makefile Targets: terraform-init-all, terraform-plan-all, terraform-lint, terraform-docs"
 echo "- Pre-commit: terraform_fmt hook configured"

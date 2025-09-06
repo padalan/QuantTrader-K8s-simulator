@@ -43,55 +43,34 @@ aws configure --profile quanttrader-dev
 
 3) Initialize Terraform
 ```bash
-make init-terraform
+make env-dev-init
 ```
 
 4) Configure variables
 ```bash
-cp terraform/terraform.tfvars.example terraform/terraform.tfvars
-# set billing_email and monthly_budget
+cp terraform/environments/dev/terraform.tfvars terraform/environments/dev/terraform.tfvars
+# adjust as needed
 ```
 
 5) Apply Terraform
 ```bash
-make apply-terraform
+make env-dev-apply
 ```
 
-### Verification
+6) Validate VPC & Networking
 ```bash
-./scripts/verify-1.1.sh
+make test-epic-1.5
 ```
-
-### Cost Monitoring
-```bash
-make check-costs
-# or
-./scripts/daily-cost.sh
-```
-
-## What Gets Created
-
-- S3 bucket for Terraform state (encrypted)
-- DynamoDB table for state locking
-- CloudWatch billing alarms at 40/60/80/100% of monthly_budget
-- SNS topic + subscription for billing notifications
-
-## Versions
-
-- AWS CLI 2.28+
-- Terraform 1.5+
-- kubectl 1.27+
-- Helm 3.10+
-- Docker 20+
 
 ## Troubleshooting
 
 - `chmod +x scripts/*.sh`
 - `aws configure --profile quanttrader-dev`
-- `cd terraform && terraform init`
+- `./scripts/terraform-env.sh dev init`
 - See `AWS-PERMISSIONS.md`
 
-## Next Steps
+- Use `make hobby-start` to practice Kubernetes locally with Kind
+- When comfortable, plan Phase 2 (introduce cloud Kubernetes, GitOps, observability)
 
 - Use `make hobby-start` to practice Kubernetes locally with Kind
 - When comfortable, plan Phase 2 (introduce cloud Kubernetes, GitOps, observability)

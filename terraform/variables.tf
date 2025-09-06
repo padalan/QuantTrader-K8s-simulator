@@ -26,3 +26,14 @@ variable "monthly_budget" {
     error_message = "Monthly budget must be between 1 and 1000 USD."
   }
 }
+
+variable "deployment_mode" {
+  description = "Deployment mode: local, hobby, or production"
+  type        = string
+  default     = "local"
+
+  validation {
+    condition     = contains(["local", "hobby", "production"], var.deployment_mode)
+    error_message = "Deployment mode must be local, hobby, or production."
+  }
+}
