@@ -1,0 +1,78 @@
+# QuantTrader-K8s-Simulator Makefile
+
+.PHONY: help install-tools setup-aws init-terraform plan-terraform apply-terraform destroy-terraform check-costs
+
+help: ## Show this help message
+	@echo "QuantTrader-K8s-Simulator - Available commands:"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+
+install-tools: ## Install required development tools
+	@echo "Installing development tools..."
+	brew install awscli terraform kubectl helm docker
+	@echo "Installing VS Code extensions..."
+	@for ext in hashicorp.terraform ms-kubernetes-tools.vscode-kubernetes-tools redhat.vscode-yaml; do \
+		echo "Installing $$ext..."; \
+		code --install-extension $$ext 2>/dev/null || echo "Extension $$ext installation failed or already installed"; \
+	done
+
+setup-aws: ## Configure AWS CLI profile
+	@echo "Configuring AWS profile..."
+	aws configure set region us-west-2 --profile quanttrader-dev
+	aws configure set output json --profile quanttrader-dev
+	@echo "Please run: aws configure --profile quanttrader-dev"
+
+init-terraform: ## Initialize Terraform
+	cd terraform && terraform init
+
+plan-terraform: ## Plan Terraform changes
+	cd terraform && terraform plan
+
+apply-terraform: ## Apply Terraform changes
+	cd terraform && terraform apply
+
+destroy-terraform: ## Destroy Terraform resources
+	cd terraform && terraform destroy
+
+check-costs: ## Check daily costs
+	./scripts/daily-cost.sh
+
+validate-terraform: ## Validate Terraform configuration
+	cd terraform && terraform validate && terraform fmt -check
+
+format-terraform: ## Format Terraform files
+	cd terraform && terraform fmt -recursive
+
+clean-cache: ## Clean Terraform cache and temporary files
+	@echo "Cleaning Terraform cache..."
+	rm -rf terraform/.terraform
+	rm -rf terraform/.terraform.lock.hcl
+	@echo "Cleaning temporary files..."
+	rm -f terraform/terraform.tfstate.backup
+	rm -f terraform/terraform.tfstate
+	@echo "Cache cleaned!"
+
+clean-repo: ## Clean repository (cache + ephemeral docs)
+	@echo "Cleaning repository..."
+	rm -rf terraform/.terraform
+	rm -rf terraform/.terraform.lock.hcl
+	rm -f terraform/terraform.tfstate.backup
+	rm -f terraform/terraform.tfstate
+	@echo "Removing ephemeral documentation..."
+	rm -f FIXES-SUMMARY.md
+	rm -f TERRAFORM-FIXES.md
+	rm -f SETUP-SCRIPT-FIXES.md
+	rm -f TASK-1.1-COMPLETION.md
+	rm -f PHASE-1.1-SUMMARY.md
+	rm -f COST-EXPLORER-INTEGRATION.md
+	rm -f IDEMPOTENCY-REVIEW.md
+	rm -f IMPROVEMENTS-SUMMARY.md
+	@echo "Repository cleaned!"
+
+clean: clean-repo ## Clean everything (cache + ephemeral docs + temp files)
+	@echo "Cleaning everything..."
+	rm -f *.log
+	rm -f *.tmp
+	rm -f .DS_Store
+	rm -rf .vscode/settings.json.bak
+	@echo "Everything cleaned!"
+
