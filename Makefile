@@ -1,5 +1,9 @@
 # QuantTrader-K8s-Simulator Makefile
 
+export AWS_PROFILE ?= quanttrader-dev
+export AWS_DEFAULT_REGION ?= us-west-2
+export TF_IN_AUTOMATION ?= 1
+
 .PHONY: help install-tools setup-aws init-terraform plan-terraform apply-terraform destroy-terraform check-costs
 
 help: ## Show this help message
@@ -78,7 +82,7 @@ clean: clean-repo ## Clean everything (cache + ephemeral docs + temp files)
 
 
 terraform-init-all: ## Initialize all environments
-	cd terraform/environments/dev && terraform init || true
+	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform init || true
 	cd terraform/environments/staging && terraform init || true
 	cd terraform/environments/prod && terraform init || true
 
@@ -103,3 +107,21 @@ test-all: ## Run all available tests
 	./scripts/test-epic-1.2.sh
 	@echo "All tests completed!"
 
+
+env-dev-init: ## Initialize Terraform in environments/dev
+	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform init
+
+env-dev-validate: ## Validate Terraform in environments/dev
+	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform validate
+
+env-dev-plan: ## Plan Terraform in environments/dev
+	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform plan -var-file="terraform.tfvars"
+
+env-dev-apply: ## Apply Terraform in environments/dev
+	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform apply -auto-approve -var-file="terraform.tfvars"
+
+env-dev-destroy: ## Destroy Terraform in environments/dev
+	cd terraform/environments/dev && AWS_PROFILE=$(AWS_PROFILE) terraform destroy -auto-approve -var-file="terraform.tfvars"
+
+test-epic-1.3: ## Run Epic 1.3 test suite
+	./scripts/test-epic-1.3.sh
