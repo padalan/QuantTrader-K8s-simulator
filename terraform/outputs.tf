@@ -1,9 +1,9 @@
 output "sns_topic_arn" {
   description = "ARN of the SNS topic for billing alerts"
-  value       = aws_sns_topic.billing.arn
+  value       = module.billing.sns_topic_arn
 }
 
 output "billing_alarms" {
   description = "List of billing alarm names"
-  value       = [for alarm in aws_cloudwatch_metric_alarm.billing : alarm.alarm_name]
+  value       = module.billing.billing_alarm_names
 }
