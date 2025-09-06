@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# verify-1.1.sh | Verification script for Task 1.1
+# verify-1.1.sh | Verification script for Epic 1.1
 # QuantTrader-K8s-Simulator Phase 1 - Epic 1.1
 
 set -euo pipefail
@@ -28,7 +28,7 @@ log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-log_info "Starting Task 1.1 Verification"
+log_info "Starting Epic 1.1 Verification"
 echo "=================================="
 
 # Check if running on macOS
@@ -255,4 +255,4 @@ echo "3. Run 'make apply-terraform' to create AWS resources"
 echo "4. Check your email and confirm SNS subscription for billing alerts"
 echo "5. Run './scripts/daily-cost.sh' to monitor costs"
 
-log_success "Task 1.1 verification completed successfully!"
+log_success "Epic 1.1 verification completed successfully!"

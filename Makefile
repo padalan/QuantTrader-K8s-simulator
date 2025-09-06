@@ -76,3 +76,30 @@ clean: clean-repo ## Clean everything (cache + ephemeral docs + temp files)
 	rm -rf .vscode/settings.json.bak
 	@echo "Everything cleaned!"
 
+
+terraform-init-all: ## Initialize all environments
+	cd terraform/environments/dev && terraform init || true
+	cd terraform/environments/staging && terraform init || true
+	cd terraform/environments/prod && terraform init || true
+
+terraform-plan-all: ## Plan all environments
+	cd terraform/environments/dev && terraform plan || true
+	cd terraform/environments/staging && terraform plan || true
+	cd terraform/environments/prod && terraform plan || true
+
+terraform-lint: ## Run terraform linting
+	cd terraform && tflint --recursive || true
+
+terraform-docs: ## Generate Terraform docs
+	cd terraform && terraform-docs markdown table --output-file README.md . || true
+
+
+test-epic-1.2: ## Test Epic 1.2 implementation
+	./scripts/test-epic-1.2.sh
+
+test-all: ## Run all available tests
+	@echo "Running comprehensive test suite..."
+	./scripts/check-prerequisites-simple.sh
+	./scripts/test-epic-1.2.sh
+	@echo "All tests completed!"
+
