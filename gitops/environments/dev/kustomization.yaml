@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: quanttrader-dev
+
+resources:
+- namespace.yaml
+- configmap.yaml
+
+patches:
+- path: patches/dev-patch.yaml
+  target:
+    kind: ConfigMap
+    name: quanttrader-config
