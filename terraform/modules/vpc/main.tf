@@ -80,7 +80,7 @@ resource "aws_route_table_association" "public" {
 
 # NAT Gateway(s)
 resource "aws_eip" "nat" {
-  count = var.enable_nat_gateway ? (var.nat_per_az ? length(aws_subnet.public) : 1) : 0
+  count  = var.enable_nat_gateway ? (var.nat_per_az ? length(aws_subnet.public) : 1) : 0
   domain = "vpc"
   tags = merge(local.merged_tags, {
     Name = "${var.project_name}-nat-eip-${count.index + 1}"
