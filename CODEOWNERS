@@ -1,0 +1,9 @@
+# CODEOWNERS
+# Default owners
+*       @padalan
+
+# Infrastructure as Code
+terraform/* @padalan
+
+# Helm charts
+charts/* @padalan 
