@@ -151,3 +151,34 @@ phase-upgrade-check: ## Check if ready for next phase
 	@echo "🎯 Phase upgrade readiness:"
 	@./scripts/phase-check.sh
 
+
+# Sprint 2 targets
+test-epic-1.6: ## Test Epic 1.6 (CI/CD)
+	./scripts/test-epic-1.6.sh
+
+test-epic-1.8: ## Test Epic 1.8 (GitOps)
+	./scripts/test-epic-1.8.sh
+
+test-epic-1.9: ## Test Epic 1.9 (Helm)
+	./scripts/test-epic-1.9.sh
+
+test-epic-1.10: ## Test Epic 1.10 (Secrets)
+	./scripts/test-epic-1.10.sh
+
+test-sprint-2: ## Test all Sprint 2 epics
+	./scripts/test-epic-1.6.sh
+	./scripts/test-epic-1.8.sh
+	./scripts/test-epic-1.9.sh
+	./scripts/test-epic-1.10.sh
+
+helm-lint: ## Lint all Helm charts
+	helm lint charts/*/
+
+helm-template: ## Template all charts for validation
+	helm template charts/market-data-simulator
+	helm template charts/trading-engine
+	helm template charts/risk-management
+
+kustomize-build: ## Build Kustomize overlays
+	kustomize build gitops/environments/dev
+
