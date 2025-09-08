@@ -44,7 +44,7 @@ variable "nat_per_az" {
   description = "Create one NAT per AZ"
   type        = bool
   default     = false
-} 
+}
 variable "aws_region" {
   description = "AWS region"
   type        = string
