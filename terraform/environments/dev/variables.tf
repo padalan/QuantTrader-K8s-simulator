@@ -45,3 +45,14 @@ variable "nat_per_az" {
   type        = bool
   default     = false
 } 
+variable "aws_region" {
+  description = "AWS region"
+  type        = string
+  default     = "us-west-2"
+}
+
+variable "aws_profile" {
+  description = "AWS profile to use (empty for default/CI)"
+  type        = string
+  default     = "quanttrader-dev"
+}

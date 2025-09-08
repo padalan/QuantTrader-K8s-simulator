@@ -32,7 +32,9 @@ jobs:
 
       - name: Terraform plan (dev)
         run: |
-          terraform -chdir=terraform/environments/dev plan -no-color -input=false -out=tfplan
+          terraform -chdir=terraform/environments/dev plan -no-color -input=false -out=tfplan \
+            -var="aws_profile=" \
+            -var="aws_region=us-west-2"
           terraform -chdir=terraform/environments/dev show -no-color tfplan > plan.txt
 
       - name: Comment plan on PR
@@ -57,4 +59,4 @@ jobs:
       - name: KICS scan (Terraform)
         uses: checkmarx/kics-action@v1
         with:
-          path: terraform 
+          path: terraform
